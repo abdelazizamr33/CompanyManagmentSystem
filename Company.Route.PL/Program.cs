@@ -1,3 +1,8 @@
+using Company.Route.BLL.Interfaces;
+using Company.Route.BLL.Repositories;
+using Company.Route.DAL.Data.Contexts;
+using Microsoft.EntityFrameworkCore;
+
 namespace Company.Route.PL
 {
     public class Program
@@ -8,6 +13,11 @@ namespace Company.Route.PL
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.AddScoped<IDepartmentRepository,DepartmentRepository>(); // Allow Dependency injection for DepartmentRepository
+            builder.Services.AddDbContext<CompanyDbContext>(options=>
+            {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")); // instead of writing connection string
+            }); // Allow Dependency Injection for CompanyDbContext // which allow CLR to create object from it whenever he wants
 
             var app = builder.Build();
 
