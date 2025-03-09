@@ -47,5 +47,62 @@ namespace Company.Route.PL.Controllers
             }
             return View();
         }
+
+        [HttpGet]
+        public IActionResult Details(int id)
+        {
+            var result=_departmentRepository.Get(id);
+            return View(result);
+        }
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            var result = _departmentRepository.Get(id);
+            return View(result);
+        }
+        [HttpPost]
+        public IActionResult Edit(Department model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var existing = _departmentRepository.Get(model.Id);
+            if (existing != null)
+            {
+                existing.Code = model.Code;
+                existing.Name = model.Name;
+                existing.CreateAt = model.CreateAt;
+                var result = _departmentRepository.Update(existing);
+                if (result > 0)
+                {
+                    return RedirectToAction("Index");
+                }
+            }
+            
+            return View(model);
+        }
+
+        [HttpGet]
+        public IActionResult Delete(int id)
+        {
+            var result = _departmentRepository.Get(id);
+            return View(result);
+        }
+        [HttpPost]
+        public IActionResult Delete(Department model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var result = _departmentRepository.Delete(model);
+            if (result > 0)
+            {
+                return RedirectToAction("Index");
+            }
+
+            return View(model);
+        }
     }
 }
