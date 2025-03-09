@@ -13,9 +13,9 @@ namespace Company.Route.BLL.Repositories
     public class DepartmentRepository : IDepartmentRepository
     {
         private readonly CompanyDbContext _context; // readonly -> make no one can assign value to it
-        public DepartmentRepository()
+        public DepartmentRepository(CompanyDbContext context)
         {
-            _context = new CompanyDbContext();
+            _context = context;
         }
         public IEnumerable<Department> GetAll()
         {
