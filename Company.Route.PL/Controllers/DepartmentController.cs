@@ -3,6 +3,7 @@ using Company.Route.BLL.Repositories;
 using Company.Route.DAL.Models;
 using Company.Route.PL.DTOs;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 
 namespace Company.Route.PL.Controllers
 {
@@ -49,57 +50,97 @@ namespace Company.Route.PL.Controllers
         }
 
         [HttpGet]
-        public IActionResult Details(int id)
+        public IActionResult Details(int? id)
         {
-            var result=_departmentRepository.Get(id);
+            if (id is null) return BadRequest("Invalid Id");
+            var result=_departmentRepository.Get(id.Value);
+
+            if(result is null) return NotFound(new {StatusCode=404,Message=$"Department with Id: {id} is Not found"});
+
             return View(result);
         }
         [HttpGet]
-        public IActionResult Edit(int id)
+
+        public IActionResult Edit(int? id)
         {
-            var result = _departmentRepository.Get(id);
+            if (id is null) return BadRequest("Invalid Id");
+            var result = _departmentRepository.Get(id.Value);
+
+            if (result is null) return NotFound(new { StatusCode = 404, Message = $"Department with Id: {id} is Not found" });
+
             return View(result);
         }
+        
+        //[HttpPost]
+        //public IActionResult Edit([FromRoute]int id,Department model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        if (id == model.Id)
+        //        {
+        //            var result = _departmentRepository.Update(model);
+        //            if (result > 0)
+        //            {
+        //                return RedirectToAction("Index");
+        //            }
+        //        }
+        //        else
+        //            return BadRequest();
+        //    }
+
+        //    return View(model);
+        //}
         [HttpPost]
-        public IActionResult Edit(Department model)
+        [ValidateAntiForgeryToken] // htmn3 ay 7ad y3ml request mngheer elForm ya3ni PostMan Cannot use
+        public IActionResult Edit([FromRoute] int id, UpdateDepartmentDTO model)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                return View(model);
-            }
-            var existing = _departmentRepository.Get(model.Id);
-            if (existing != null)
-            {
-                existing.Code = model.Code;
-                existing.Name = model.Name;
-                existing.CreateAt = model.CreateAt;
-                var result = _departmentRepository.Update(existing);
+                var department = new Department()
+                {
+                    Id = id,
+                    Name = model.Name,
+                    Code = model.Code,
+                    CreateAt = model.CreateAt,
+                };
+                var result = _departmentRepository.Update(department);
                 if (result > 0)
                 {
                     return RedirectToAction("Index");
                 }
+                else
+                    return BadRequest();
             }
-            
+
             return View(model);
         }
 
         [HttpGet]
-        public IActionResult Delete(int id)
+        public IActionResult Delete(int? id)
         {
-            var result = _departmentRepository.Get(id);
+            if (id is null) return BadRequest("Invalid Id");
+            var result = _departmentRepository.Get(id.Value);
+
+            if (result is null) return NotFound(new { StatusCode = 404, Message = $"Department with Id: {id} is Not found" });
+
             return View(result);
         }
         [HttpPost]
-        public IActionResult Delete(Department model)
+        [ValidateAntiForgeryToken]
+        public IActionResult Delete([FromRoute] int id, Department model)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                return View(model);
-            }
-            var result = _departmentRepository.Delete(model);
-            if (result > 0)
-            {
-                return RedirectToAction("Index");
+                if (id == model.Id)
+                {
+                    var result = _departmentRepository.Delete(model);
+                    if (result > 0)
+                    {
+                        return RedirectToAction("Index");
+                    }
+                }
+                else
+                    return BadRequest();
             }
 
             return View(model);
