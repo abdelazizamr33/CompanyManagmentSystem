@@ -10,35 +10,41 @@ using System.Threading.Tasks;
 
 namespace Company.Route.BLL.Repositories
 {
-    public class DepartmentRepository : IDepartmentRepository
+    public class DepartmentRepository : GenericRepository<Department>,IDepartmentRepository
     {
-        private readonly CompanyDbContext _context; // readonly -> make no one can assign value to it
-        public DepartmentRepository(CompanyDbContext context)
+        public DepartmentRepository(CompanyDbContext context):base(context)
         {
-            _context = context;
+            
         }
-        public IEnumerable<Department> GetAll()
-        {
-            return _context.Departments.ToList();
-        }
-        public Department? Get(int id)
-        {
-            return _context.Departments.Find(id);
-        }
-        public int Add(Department model)
-        {
-            _context.Departments.Add(model);
-            return _context.SaveChanges();
-        }
-        public int Update(Department model)
-        {
-            _context.Departments.Update(model);
-            return _context.SaveChanges();
-        }
-        public int Delete(Department model)
-        {
-            _context.Departments.Remove(model);
-            return _context.SaveChanges();
-        }
+        #region Old Code Before refactor
+        //private readonly CompanyDbContext _context; // readonly -> make no one can assign value to it
+        //public DepartmentRepository(CompanyDbContext context)
+        //{
+        //    _context = context;
+        //}
+        //public IEnumerable<Department> GetAll()
+        //{
+        //    return _context.Departments.ToList();
+        //}
+        //public Department? Get(int id)
+        //{
+        //    return _context.Departments.Find(id);
+        //}
+        //public int Add(Department model)
+        //{
+        //    _context.Departments.Add(model);
+        //    return _context.SaveChanges();
+        //}
+        //public int Update(Department model)
+        //{
+        //    _context.Departments.Update(model);
+        //    return _context.SaveChanges();
+        //}
+        //public int Delete(Department model)
+        //{
+        //    _context.Departments.Remove(model);
+        //    return _context.SaveChanges();
+        //} 
+        #endregion
     }
 }
