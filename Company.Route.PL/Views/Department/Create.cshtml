@@ -7,6 +7,7 @@
 <br />
 <br />
 <form asp-action="Create">
+    <partial name="DepartmentPartialView/_CreateEditPartialView" />
     <div class="my-3">
         <label asp-for="Code"class="col-form-label">Code</label>
         <input asp-for="Code" type="text" class="form-control" />
@@ -28,4 +29,9 @@
     </div>
 </form>
 
-
+@*Client side validation not to send request if unvalid requirmentts*@
+@section ValidationSection
+{
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}
