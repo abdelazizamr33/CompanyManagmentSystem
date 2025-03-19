@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Company.Route.BLL.Interfaces
 {
-    public interface IDepartmentRepository:IGenericRepository<Department>
+    public interface IDepartmentRepository : IGenericRepository<Department>
     {
         //IEnumerable<Department> GetAll();
         //Department? Get(int id);

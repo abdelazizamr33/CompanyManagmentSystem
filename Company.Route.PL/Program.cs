@@ -14,6 +14,7 @@ namespace Company.Route.PL
             // Add services to the container.
             builder.Services.AddControllersWithViews();
             builder.Services.AddScoped<IDepartmentRepository,DepartmentRepository>(); // Allow Dependency injection for DepartmentRepository
+            builder.Services.AddScoped<IEmployeeInterface, Employeerepository>(); // Allow Dependency injection for DepartmentRepository
             builder.Services.AddDbContext<CompanyDbContext>(options=>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")); // instead of writing connection string
