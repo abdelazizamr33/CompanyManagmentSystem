@@ -50,25 +50,25 @@ namespace Company.Route.PL.Controllers
         }
 
         [HttpGet]
-        public IActionResult Details(int? id)
+        public IActionResult Details(int? id,string viewName="Details")
         {
             if (id is null) return BadRequest("Invalid Id");
             var result=_departmentRepository.Get(id.Value);
 
             if(result is null) return NotFound(new {StatusCode=404,Message=$"Department with Id: {id} is Not found"});
 
-            return View(result);
+            return View(viewName,result);
         }
         [HttpGet]
 
         public IActionResult Edit(int? id)
         {
-            if (id is null) return BadRequest("Invalid Id");
-            var result = _departmentRepository.Get(id.Value);
+            //if (id is null) return BadRequest("Invalid Id");
+            //var result = _departmentRepository.Get(id.Value);
 
-            if (result is null) return NotFound(new { StatusCode = 404, Message = $"Department with Id: {id} is Not found" });
+            //if (result is null) return NotFound(new { StatusCode = 404, Message = $"Department with Id: {id} is Not found" });
 
-            return View(result);
+            return Details(id, "Edit");
         }
         
         //[HttpPost]
@@ -118,12 +118,13 @@ namespace Company.Route.PL.Controllers
         [HttpGet]
         public IActionResult Delete(int? id)
         {
-            if (id is null) return BadRequest("Invalid Id");
-            var result = _departmentRepository.Get(id.Value);
+            //if (id is null) return BadRequest("Invalid Id");
+            //var result = _departmentRepository.Get(id.Value);
 
-            if (result is null) return NotFound(new { StatusCode = 404, Message = $"Department with Id: {id} is Not found" });
+            //if (result is null) return NotFound(new { StatusCode = 404, Message = $"Department with Id: {id} is Not found" });
 
-            return View(result);
+            return Details(id, "Delete");
+
         }
         [HttpPost]
         [ValidateAntiForgeryToken]

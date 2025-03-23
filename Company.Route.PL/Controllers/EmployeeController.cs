@@ -17,6 +17,13 @@ namespace Company.Route.PL.Controllers
         public IActionResult Index()
         {
             var employee = _EmployeeRepository.GetAll();
+            // View ->
+            // Dictionary : Key ,Data
+            // 1 viewData : Transfer Extra Info. from Controller "Action" to View
+            //ViewData["Message"] = "Hello From ViewData";
+            // 2 ViewBag  : Transfer Extra Info. from Controller "Action" to View
+            //ViewBag.Message = "Hello From ViewBag";
+            // 3 TempData : 
             return View(employee);
         }
 
@@ -46,6 +53,7 @@ namespace Company.Route.PL.Controllers
                 var count = _EmployeeRepository.Add(employee);
                 if (count > 0)
                 {
+                    TempData["Message"] = "Employee is Created";
                     return RedirectToAction("Index");
                 }
             }
