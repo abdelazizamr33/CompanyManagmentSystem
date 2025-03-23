@@ -2,12 +2,29 @@
 
 @{
     ViewData["Title"] = "Index";
+    //ViewData["Message"];
+    // string? ViewBagMessage = ViewBag.Message;// More Flexible "dynamic datatype"
+    // string? ViewDataMessage = ViewBag.Message;
 }
 
 <h1>All Employee</h1>
 
 <br />
 <br />
+@* <div class="m-3 lert alert-danger">
+    <p>@ViewData["Message"]</p>
+</div> *@
+@* <div class="m-3 lert alert-danger">
+    <p>@ViewBag.Message</p>
+</div> *@
+
+@if(!string.IsNullOrEmpty(TempData["Message"] as string))
+{
+    <div class="m-3 lert alert-info">
+        <p>@TempData["Message"]</p>
+    </div>
+}
+
 
 <a asp-action="Create" asp-controller="Employee" class="btn btn-primary"> Create Employee</a>
 
