@@ -1,6 +1,8 @@
-﻿@model Employee
+﻿@model CreateEmployeeDTO
 @{
     ViewData["Title"] = "Edit";
+    var Departments = new SelectList(ViewData["departments"] as IEnumerable<Department> ?? new List<Department>(), "Id", "Name");
+
 }
 
 <h1>Edit</h1>

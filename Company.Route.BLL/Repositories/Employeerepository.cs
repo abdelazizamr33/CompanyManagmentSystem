@@ -1,6 +1,7 @@
 ﻿using Company.Route.BLL.Interfaces;
 using Company.Route.DAL.Data.Contexts;
 using Company.Route.DAL.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,11 +12,16 @@ namespace Company.Route.BLL.Repositories
 {
     public class Employeerepository : GenericRepository<Employee>,IEmployeeInterface
     {
-
+        private readonly CompanyDbContext _context;
 
         public Employeerepository(CompanyDbContext context):base(context) // ASK CLR To Create object from DbContext
         {
-            
+            _context = context;
+        }
+
+        public List<Employee> GetByName(string name)
+        {
+           return  _context.Employees.Include(E => E.Department).Where(E=>E.Name.ToLower().Contains(name.ToLower())).ToList();
         }
 
         #region Old Code Before Refactor

@@ -4,6 +4,7 @@ using Company.Route.DAL.Data.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Company.Route.DAL.Data.Migrations
 {
     [DbContext(typeof(CompanyDbContext))]
-    partial class CompanyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250323152219_AddEmployeeRelationShip")]
+    partial class AddEmployeeRelationShip
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -64,7 +67,7 @@ namespace Company.Route.DAL.Data.Migrations
                     b.Property<DateTime>("CreateAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("DepartmentId")
+                    b.Property<int?>("DeprtmentId")
                         .HasColumnType("int");
 
                     b.Property<string>("Email")
@@ -93,7 +96,7 @@ namespace Company.Route.DAL.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DepartmentId");
+                    b.HasIndex("DeprtmentId");
 
                     b.ToTable("Employees");
                 });
@@ -102,7 +105,7 @@ namespace Company.Route.DAL.Data.Migrations
                 {
                     b.HasOne("Company.Route.DAL.Models.Department", "Department")
                         .WithMany("Employees")
-                        .HasForeignKey("DepartmentId")
+                        .HasForeignKey("DeprtmentId")
                         .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Department");

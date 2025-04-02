@@ -1,7 +1,7 @@
 ﻿@model Employee
-@*
-    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
-*@
+@{
+    var Departments = new SelectList(ViewData["departments"] as IEnumerable<Department> ?? new List<Department>(), "Id", "Name");
+}
 <div class="my-3">
     <label asp-for="Name" class="col-form-label"></label>
     <input asp-for="Name" class="form-control" readonly />
@@ -48,4 +48,10 @@
 <div class="my-3">
     <label asp-for="HirringDate" class="col-form-label"></label>
     <input asp-for="HirringDate" class="form-control" readonly />
+</div>
+<div class="my-3">
+    <label asp-for="DepartmentId" class="col-form-label"></label>
+    <select asp-for="DepartmentId" asp-items="Departments" class="form-control" disabled>
+        <option value="">-- Select department --</option>
+    </select>
 </div>
