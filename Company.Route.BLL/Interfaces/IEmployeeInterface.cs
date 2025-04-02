@@ -15,6 +15,6 @@ namespace Company.Route.BLL.Interfaces
         //int Add(Employee model);
         //int Update(Employee model);
         //int Delete(Employee model);
-        //Employee? GetByName(string name);
+        List<Employee> GetByName(string name);
     }
 }

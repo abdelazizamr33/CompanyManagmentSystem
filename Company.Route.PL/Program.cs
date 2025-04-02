@@ -1,6 +1,8 @@
 using Company.Route.BLL.Interfaces;
 using Company.Route.BLL.Repositories;
 using Company.Route.DAL.Data.Contexts;
+using Company.Route.PL.Mapping;
+using Company.Route.PL.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace Company.Route.PL
@@ -15,10 +17,22 @@ namespace Company.Route.PL
             builder.Services.AddControllersWithViews();
             builder.Services.AddScoped<IDepartmentRepository,DepartmentRepository>(); // Allow Dependency injection for DepartmentRepository
             builder.Services.AddScoped<IEmployeeInterface, Employeerepository>(); // Allow Dependency injection for DepartmentRepository
+            builder.Services.AddAutoMapper(typeof(EmployeeProfile));
             builder.Services.AddDbContext<CompanyDbContext>(options=>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")); // instead of writing connection string
             }); // Allow Dependency Injection for CompanyDbContext // which allow CLR to create object from it whenever he wants
+
+            // differ by Life Time
+            //builder.Services.AddScoped();     // Create object life time per request - unreachable object
+            //builder.Services.AddTransient();  // Create object life time per operation 
+            //builder.Services.AddSingleton();  // Create object life time per application
+
+            builder.Services.AddScoped<IScopedService, ScopedService>(); // per request
+            builder.Services.AddTransient<ITransientService, TransientService>(); // per operation
+            builder.Services.AddSingleton<ISingeltonService, SingeltonService>(); //per application
+
+
 
             var app = builder.Build();
 

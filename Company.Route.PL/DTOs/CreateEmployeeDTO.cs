@@ -23,5 +23,7 @@ namespace Company.Route.PL.DTOs
         public DateTime HirringDate { get; set; }
         [DisplayName("Date of Creation")]
         public DateTime CreateAt { get; set; }
+        [DisplayName("Department")]
+        public int? DepartmentId  { get; set; }
     }
 }
