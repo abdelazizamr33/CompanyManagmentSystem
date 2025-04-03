@@ -1,8 +1,10 @@
 using System.Diagnostics;
 using System.Text;
+using Company.Route.DAL.Models;
 using Company.Route.PL.Models;
 using Company.Route.PL.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Company.Route.PL.Controllers
@@ -17,6 +19,7 @@ namespace Company.Route.PL.Controllers
         private readonly ITransientService _transientService2;
         private readonly ISingeltonService _singeltonService1;
         private readonly ISingeltonService _singeltonService2;
+        private readonly UserManager<AppUser> _userManager;
 
         public HomeController(ILogger<HomeController> logger
             ,IScopedService scopedService1
@@ -24,7 +27,8 @@ namespace Company.Route.PL.Controllers
             , ITransientService transientService1
             , ITransientService transientService2
             , ISingeltonService singeltonService1
-            , ISingeltonService singeltonService2)
+            , ISingeltonService singeltonService2
+            , UserManager<AppUser> userManager)
         {
             _logger = logger;
            _scopedService1 = scopedService1;
@@ -33,6 +37,7 @@ namespace Company.Route.PL.Controllers
            _transientService2 = transientService2;
            _singeltonService1 = singeltonService1;
            _singeltonService2 = singeltonService2;
+           _userManager = userManager;
         }
 
         public string TestLifeTime()
@@ -46,9 +51,14 @@ namespace Company.Route.PL.Controllers
             builder.Append($"singeltonService :: {_scopedService2.GetGuid()}\n\n");
             return builder.ToString();
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var user = await _userManager.GetUserAsync(User); // Get the logged-in user
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Account"); // Redirect if not logged in
+            }
+            return View(user);
         }
 
         public IActionResult Privacy()
