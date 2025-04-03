@@ -5,12 +5,14 @@ using Company.Route.DAL.Data.Migrations;
 using Company.Route.DAL.Models;
 using Company.Route.PL.DTOs;
 using Company.Route.PL.Helpers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Company.Route.PL.Controllers
 {
+    [Authorize]
     public class EmployeeController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -87,7 +89,7 @@ namespace Company.Route.PL.Controllers
         {
             if (id is null) return BadRequest("Invalid Id");
             var result =await  _unitOfWork.EmployeeRepository.GetAsync(id.Value);
-            var department = _unitOfWork.DepartmentRepository.GetAllAsync();
+            var department = await _unitOfWork.DepartmentRepository.GetAllAsync();
             ViewData["departments"] = department;
             ViewData["id"] = id;
             if (result is null) return NotFound(new { StatusCode = 404, Message = $"Employee with Id: {id} is Not found" });

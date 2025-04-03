@@ -1,6 +1,4 @@
-﻿@* @model Employee
- *@
-@model CreateEmployeeDTO
+﻿@model CreateEmployeeDTO
 @{
     ViewData["Title"] = "Delete";
     var Departments = new SelectList(ViewData["departments"] as IEnumerable<Department> ?? new List<Department>(), "Id", "Name");

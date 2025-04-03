@@ -2,10 +2,12 @@ using System.Diagnostics;
 using System.Text;
 using Company.Route.PL.Models;
 using Company.Route.PL.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Company.Route.PL.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
