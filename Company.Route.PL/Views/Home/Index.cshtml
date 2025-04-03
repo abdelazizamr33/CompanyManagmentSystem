@@ -1,8 +1,31 @@
-﻿@{
+﻿@model AppUser
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <br />
+    <h1 class="display-4">Welcome, @Model.FirstName @Model.LastName</h1>
+    <br />      
+    <br />      
+    <br />      
+    <div class="d-flex justify-content-center gap-3 mt-4">
+        <a style="width: 250px; height: 100px;" class="nav-link text-light btn btn-success d-flex align-items-center justify-content-center"
+           asp-area="" asp-controller="Employee" asp-action="Index">
+            Explore Employees
+        </a>
+
+        <a style="width: 250px; height: 100px;" class="nav-link text-light btn btn-info d-flex align-items-center justify-content-center"
+           asp-area="" asp-controller="Department" asp-action="Index">
+            Explore Departments
+        </a>
+        <a style="width: 250px; height: 100px;" class="nav-link text-light btn btn-dark  d-flex align-items-center justify-content-center"
+           asp-area="" asp-controller="Department" asp-action="Index">
+            Explore Roles
+        </a>
+        <a style="width: 250px; height: 100px;" class="nav-link text-light btn btn-danger d-flex align-items-center justify-content-center"
+           asp-area="" asp-controller="Account" asp-action="SignOut">
+            Sign Out
+        </a>
+    </div>
 </div>
