@@ -1,4 +1,5 @@
-﻿using Company.Route.BLL.Interfaces;
+﻿using AutoMapper;
+using Company.Route.BLL.Interfaces;
 using Company.Route.BLL.Repositories;
 using Company.Route.DAL.Models;
 using Company.Route.PL.DTOs;
@@ -10,18 +11,25 @@ namespace Company.Route.PL.Controllers
     // MVC Controller
     public class DepartmentController : Controller
     {
-        private readonly IDepartmentRepository _departmentRepository;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
+
+        //private readonly IDepartmentRepository _departmentRepository;
 
         //Ask CLR Craete object from departmentRepository
         // Dependency Injection
-        public DepartmentController(IDepartmentRepository departmentRepository) //implement against interface not concrete class instead of "DepartmentRepository" use "IDepartmentRepository"
+        public DepartmentController(/*IDepartmentRepository departmentRepository*/
+            IUnitOfWork unitOfWork,
+            IMapper mapper) //implement against interface not concrete class instead of "DepartmentRepository" use "IDepartmentRepository"
         {
-            _departmentRepository = departmentRepository;
+            //_departmentRepository = departmentRepository;
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
         [HttpGet] // GET : /Department/Index
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var departments= _departmentRepository.GetAll();
+            var departments =await _unitOfWork.DepartmentRepository.GetAllAsync();
             return View(departments);
         }
         [HttpGet]
@@ -30,17 +38,19 @@ namespace Company.Route.PL.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Create(CreateDepartmentDTO model)
+        public async Task<IActionResult> Create(CreateDepartmentDTO model)
         {
             if(ModelState.IsValid) // Server side Validation for data coming from form
             {
-                var department = new Department() // Mapping
-                {
-                    Code=model.Code,
-                    Name=model.Name,
-                    CreateAt=model.CreateAt,
-                };
-                var count=_departmentRepository.Add(department);
+                //var department = new Department() // Mapping
+                //{
+                //    Code=model.Code,
+                //    Name=model.Name,
+                //    CreateAt=model.CreateAt,
+                //};
+                var department=_mapper.Map<Department>(model);
+                _unitOfWork.DepartmentRepository.AddAsync(department);
+                var count = await _unitOfWork.CompleteAsync();
                 if (count > 0)
                 {
                     return RedirectToAction("Index");
@@ -50,10 +60,10 @@ namespace Company.Route.PL.Controllers
         }
 
         [HttpGet]
-        public IActionResult Details(int? id,string viewName="Details")
+        public async Task<IActionResult> Details(int? id,string viewName="Details")
         {
             if (id is null) return BadRequest("Invalid Id");
-            var result=_departmentRepository.Get(id.Value);
+            var result= await _unitOfWork.DepartmentRepository.GetAsync(id.Value);
 
             if(result is null) return NotFound(new {StatusCode=404,Message=$"Department with Id: {id} is Not found"});
 
@@ -61,14 +71,14 @@ namespace Company.Route.PL.Controllers
         }
         [HttpGet]
 
-        public IActionResult Edit(int? id)
+        public async Task<IActionResult> Edit(int? id)
         {
             //if (id is null) return BadRequest("Invalid Id");
             //var result = _departmentRepository.Get(id.Value);
 
             //if (result is null) return NotFound(new { StatusCode = 404, Message = $"Department with Id: {id} is Not found" });
 
-            return Details(id, "Edit");
+            return await Details(id, "Edit");
         }
         
         //[HttpPost]
@@ -92,18 +102,21 @@ namespace Company.Route.PL.Controllers
         //}
         [HttpPost]
         [ValidateAntiForgeryToken] // htmn3 ay 7ad y3ml request mngheer elForm ya3ni PostMan Cannot use
-        public IActionResult Edit([FromRoute] int id, UpdateDepartmentDTO model)
+        public async Task<IActionResult> Edit([FromRoute] int id, UpdateDepartmentDTO model)
         {
             if (ModelState.IsValid)
             {
-                var department = new Department()
-                {
-                    Id = id,
-                    Name = model.Name,
-                    Code = model.Code,
-                    CreateAt = model.CreateAt,
-                };
-                var result = _departmentRepository.Update(department);
+                //var department = new Department()
+                //{
+                //    Id = id,
+                //    Name = model.Name,
+                //    Code = model.Code,
+                //    CreateAt = model.CreateAt,
+                //};
+                var department = _mapper.Map<Department>(model);
+                department.Id = id;
+                _unitOfWork.DepartmentRepository.Update(department);
+                var result = await _unitOfWork.CompleteAsync();
                 if (result > 0)
                 {
                     return RedirectToAction("Index");
@@ -116,25 +129,26 @@ namespace Company.Route.PL.Controllers
         }
 
         [HttpGet]
-        public IActionResult Delete(int? id)
+        public async Task<IActionResult> Delete(int? id)
         {
             //if (id is null) return BadRequest("Invalid Id");
             //var result = _departmentRepository.Get(id.Value);
 
             //if (result is null) return NotFound(new { StatusCode = 404, Message = $"Department with Id: {id} is Not found" });
 
-            return Details(id, "Delete");
+            return await  Details(id, "Delete");
 
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Delete([FromRoute] int id, Department model)
+        public async Task<IActionResult> Delete([FromRoute] int id, Department model)
         {
             if (ModelState.IsValid)
             {
                 if (id == model.Id)
                 {
-                    var result = _departmentRepository.Delete(model);
+                    _unitOfWork.DepartmentRepository.Delete(model);
+                    var result =await _unitOfWork.CompleteAsync();
                     if (result > 0)
                     {
                         return RedirectToAction("Index");

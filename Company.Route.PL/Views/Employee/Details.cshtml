@@ -1,6 +1,7 @@
-﻿@model Employee
+﻿@model CreateEmployeeDTO
 @{
     ViewData["Title"] = "Details";
+    var id=ViewData["id"];
 }
 
 <h1>Details</h1>
@@ -9,7 +10,7 @@
 <div>
     <partial name="EmployeePartialView/_DeleteDetailPartialView" />
     <div class="my-3">
-        <a asp-action="Edit" value="Edit" class="btn btn-warning" asp-route-id="@Model.Id">Edit</a>
+        <a asp-action="Edit" asp-route-id="@id" class="btn btn-warning">Edit</a>
         <a asp-action="Index" class="btn btn-light">Back to List</a>
     </div>
 </div>
