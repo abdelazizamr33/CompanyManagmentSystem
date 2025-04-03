@@ -1,4 +1,6 @@
-﻿@model Employee
+﻿@* @model Employee
+ *@
+@model CreateEmployeeDTO
 @{
     ViewData["Title"] = "Delete";
     var Departments = new SelectList(ViewData["departments"] as IEnumerable<Department> ?? new List<Department>(), "Id", "Name");
@@ -11,7 +13,8 @@
 <form asp-action="Delete">
     <partial name="EmployeePartialView/_DeleteDetailPartialView" />
     <div class="my-3">
-        <input type="submit" value="Delete" class="btn btn-danger" asp-route-id="@Model.Id" />
+        <input asp-for="ImageName" hidden/>
+        <input type="submit" value="Delete" class="btn btn-danger" />
         <a asp-action="Index" class="btn btn-light">Back to List</a>
     </div>
 </form>
