@@ -36,7 +36,7 @@ namespace Company.Route.PL
             builder.Services.AddTransient<ITransientService, TransientService>(); // per operation
             builder.Services.AddSingleton<ISingeltonService, SingeltonService>(); //per application
 
-            builder.Services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<CompanyDbContext>();
+            builder.Services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<CompanyDbContext>().AddDefaultTokenProviders();
             builder.Services.ConfigureApplicationCookie(config =>
             {
                 config.LoginPath = "/Account/SignIn";
