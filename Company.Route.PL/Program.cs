@@ -2,8 +2,12 @@ using Company.Route.BLL.Interfaces;
 using Company.Route.BLL.Repositories;
 using Company.Route.DAL.Data.Contexts;
 using Company.Route.DAL.Models;
+using Company.Route.PL.Helpers;
 using Company.Route.PL.Mapping;
 using Company.Route.PL.Services;
+using Company.Route.PL.Settings;
+using Microsoft.AspNetCore.Authentication.Facebook;
+using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,6 +18,27 @@ namespace Company.Route.PL
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Services.AddAuthentication(o =>
+            {
+                o.DefaultAuthenticateScheme = GoogleDefaults.AuthenticationScheme;
+                o.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+
+            }).AddGoogle(o =>
+            {
+                o.ClientId = builder.Configuration["Authentication:Google:ClientId"];
+                o.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
+            });
+            builder.Services.AddAuthentication(o =>
+            {
+                o.DefaultAuthenticateScheme = FacebookDefaults.AuthenticationScheme;
+                o.DefaultChallengeScheme = FacebookDefaults.AuthenticationScheme;
+
+            }).AddFacebook(o =>
+            {
+                o.ClientId = builder.Configuration["Authentication:Facebook:AppId"];
+                o.ClientSecret = builder.Configuration["Authentication:Facebook:AppSecret"];
+            });
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
@@ -40,7 +65,14 @@ namespace Company.Route.PL
             builder.Services.ConfigureApplicationCookie(config =>
             {
                 config.LoginPath = "/Account/SignIn";
+                config.AccessDeniedPath = "/Account/AccessDenied";
             });
+            
+
+            builder.Services.Configure<MailSettings>(builder.Configuration.GetSection(nameof(MailSettings)));
+            builder.Services.AddScoped<IMailService , MailService>();
+            builder.Services.Configure<TwilioSettings>(builder.Configuration.GetSection(nameof(TwilioSettings)));
+            builder.Services.AddScoped<ITwilioService, TwilioService>();
 
 
             var app = builder.Build();

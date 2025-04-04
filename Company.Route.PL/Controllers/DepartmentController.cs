@@ -131,6 +131,8 @@ namespace Company.Route.PL.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
+
         public async Task<IActionResult> Delete(int? id)
         {
             //if (id is null) return BadRequest("Invalid Id");
@@ -143,6 +145,8 @@ namespace Company.Route.PL.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
+
         public async Task<IActionResult> Delete([FromRoute] int id, Department model)
         {
             if (ModelState.IsValid)
