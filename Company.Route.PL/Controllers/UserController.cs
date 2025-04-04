@@ -19,7 +19,7 @@ namespace Company.Route.PL.Controllers
         public async Task<IActionResult> Index(string? SearchInput)
         {
             IEnumerable<UserToReturnDTO> users;
-            if (SearchInput.IsNullOrEmpty())
+            if (string.IsNullOrEmpty(SearchInput))
             {
                 users = _userManager.Users.Select(U => new UserToReturnDTO()
                 {

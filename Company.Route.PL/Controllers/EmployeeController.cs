@@ -35,7 +35,7 @@ namespace Company.Route.PL.Controllers
         public async Task<IActionResult> Index(string? SearchInput)
         {
             IEnumerable<Employee> employees ;
-            if (SearchInput.IsNullOrEmpty())
+            if (string.IsNullOrEmpty(SearchInput))
             {
                 employees =await _unitOfWork.EmployeeRepository.GetAllAsync();
 
@@ -52,6 +52,23 @@ namespace Company.Route.PL.Controllers
             //ViewBag.Message = "Hello From ViewBag";
             // 3 TempData : 
             return View(employees);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Search(string? SearchInput)
+        {
+            IEnumerable<Employee> employees;
+            if (string.IsNullOrEmpty(SearchInput))
+            {
+                employees = await _unitOfWork.EmployeeRepository.GetAllAsync();
+
+            }
+            else
+            {
+                employees = await _unitOfWork.EmployeeRepository.GetByNameAsync(SearchInput);
+            }
+            
+            return PartialView("EmployeePartialView/EmployeesTablePartialView", employees);
         }
 
         [HttpGet]
@@ -155,6 +172,8 @@ namespace Company.Route.PL.Controllers
             return View(model);
         }
         [HttpGet]
+        [Authorize(Roles = "Admin")]
+
         public async Task<IActionResult> Delete(int? id)
         {
             if (id is null) return BadRequest("Invalid Id");
@@ -168,6 +187,7 @@ namespace Company.Route.PL.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete([FromRoute] int id, CreateEmployeeDTO model)
         {
             if (ModelState.IsValid)

@@ -51,7 +51,7 @@ namespace Company.Route.PL.Controllers
         public async Task<IActionResult> Index(string? SearchInput)
         {
             IEnumerable<RoleToReturnDto> roles;
-            if (SearchInput.IsNullOrEmpty())
+            if (string.IsNullOrEmpty(SearchInput))
             {
                 roles = _roleManager.Roles.Select(U => new RoleToReturnDto()
                 {
