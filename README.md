@@ -46,11 +46,12 @@ Home Page
 ![image](https://github.com/user-attachments/assets/8f48da46-1fea-4383-a1d5-d426fcadfc84)
 
 Department Page
-![image](https://github.com/user-attachments/assets/8c936e7d-25bd-4309-a616-41c2a7210e24)
-Create Department
 ![image](https://github.com/user-attachments/assets/77b10c37-1b99-4ffb-b2ff-95f8b40044eb)
+Create Department
+![image](https://github.com/user-attachments/assets/8c936e7d-25bd-4309-a616-41c2a7210e24)
 Details Department
 ![image](https://github.com/user-attachments/assets/721ad057-3eef-4cdd-8231-c11227e87e35)
+
 Employees Page
 ![image](https://github.com/user-attachments/assets/18c5380a-8552-482f-8108-408c1bee3476)
 Create Employee
